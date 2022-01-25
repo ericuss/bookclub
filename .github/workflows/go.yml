@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ main ]
 
+defaults:
+  run:
+    working-directory: ./src/api
+
+
 jobs:
 
   build:
@@ -19,5 +24,4 @@ jobs:
         go-version: 1.17
 
     - name: Build
-      working-directory: ./src/backend/api
       run: go build -v ./...

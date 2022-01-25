@@ -5,7 +5,7 @@ EXPOSE 443
 
 FROM golang:1.17-alpine AS build
 WORKDIR /src
-COPY  ["./api/", "/src/api/"]
+COPY  ["./src/api/", "/src/api/"]
 WORKDIR /src/api/
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o main -o /app/main

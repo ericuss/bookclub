@@ -1,0 +1,25 @@
+version: '3.4'
+
+services:
+  mongo:
+    image: mongo:4.4.5
+    restart: always
+    ports:
+      - "27017:27017"
+  
+  api:
+    environment:
+    - connectionString=mongodb://mongo:27017
+    - ORIGIN_ALLOWED=*
+    ports:
+      - "8080:8080"
+    depends_on:    
+    - mongo
+
+  web:
+    # environment:
+    # - connectionString=mongodb://mongo:27017
+    ports:
+      - "3000:80"
+    depends_on:    
+    - api
