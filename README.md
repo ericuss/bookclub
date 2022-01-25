@@ -3,4 +3,4 @@
 
 # bookclub
 
-[![Books preview](https://github.com/ericuss/bookclub/docs/images/books-preview.png)](https://github.com/ericuss/bookclub/docs/images/books-preview.png)
+[![Books preview](https://github.com/ericuss/bookclub/blob/main/docs/images/books-preview.png)](https://github.com/ericuss/bookclub/blob/main/docs/images/books-preview.png)
