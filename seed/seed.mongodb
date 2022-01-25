@@ -1,0 +1,41 @@
+// MongoDB Playground
+// To disable this template go to Settings | MongoDB | Use Default Template For Playground.
+// Make sure you are connected to enable completions and to be able to run a playground.
+// Use Ctrl+Space inside a snippet or a string literal to trigger completions.
+
+// Select the database to use.
+use('BookClub');
+
+// The drop() command destroys all data from a collection.
+// Make sure you run it against the correct database and collection.
+db.Books.drop();
+
+// Insert a few documents into the sales collection.
+db.Books.insertMany([
+  {
+    "Id": "2767793-the-hero-of-ages",
+    "Title": "The Hero of Ages",
+    "Status": "(The Mistborn Saga #3)",
+    "Species": "Brandon Sanderson",
+    "Type": "4.49",
+    "Sinopsis": "Who is the Hero of Ages?\nTo end the Final Empire and restore freedom, Vin killed the Lord Ruler. But as a result, the Deepness—the lethal form of the ubiquitous mists—is back, along with increasingly heavy ashfalls and ever more powerful earthquakes. Humanity appears to be doomed.Having escaped death at the climax of The Well of Ascension only by becoming a Mistborn him\n  \n  Who is the Hero of Ages?\nTo end the Final Empire and restore freedom, Vin killed the Lord Ruler. But as a result, the Deepness—the lethal form of the ubiquitous mists—is back, along with increasingly heavy ashfalls and ever more powerful earthquakes. Humanity appears to be doomed.Having escaped death at the climax of The Well of Ascension only by becoming a Mistborn himself, Emperor Elend Venture hopes to find clues left behind by the Lord Ruler that will allow him to save the world. Vin is consumed with guilt at having been tricked into releasing the mystic force known as Ruin from the Well. Ruin wants to end the world, and its near omniscience and ability to warp reality make stopping it seem impossible. Vin can't even discuss it with Elend lest Ruin learn their plans!\n  ...more",
+    "Image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1628563911l/2767793._SY475_.jpg",
+    "Url": "https://www.goodreads.com/book/show/2767793-the-hero-of-ages",
+    "Pages": "572 pages",
+    "Username": "Eric",
+    "Readed": false
+  },
+  {
+    "Id": "64246.Pir_mides",
+    "Title": "Pirómides",
+    "Status": "(Discworld #7)",
+    "Species": "Terry PratchettCristina Macía Orio(Translator)",
+    "Type": "3.90",
+    "Sinopsis": "Un nuevo miembro de la hermandad de asesinos hereda el reino de Djelibeyi, conocido por sus monumentales pirámides y el glorioso hecho de que dentro de sus fronteras nada ha cambiado en 1.500 años. Sin embargo, el nuevo comarca no está dispuesto a que las cosas sigan igual...",
+    "Image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1240480057l/64246.jpg",
+    "Url": "https://www.goodreads.com/book/show/64246.Pir_mides",
+    "Pages": "432 pages",
+    "Username": "Eric",
+    "Readed": false
+  }
+]);
