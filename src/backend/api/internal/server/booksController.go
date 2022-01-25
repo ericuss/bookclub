@@ -47,7 +47,7 @@ func (a *booksController) add(w http.ResponseWriter, r *http.Request) {
 	var commandRequest commands.AddBookRequest
 	json.Unmarshal(reqBody, &commandRequest)
 
-	book, _ := commands.NewUpsertCharactersHandler().Handler(commandRequest)
+	book, _ := commands.NewAddBookHandler().Handler(commandRequest)
 
 	json.NewEncoder(w).Encode(book)
 }
