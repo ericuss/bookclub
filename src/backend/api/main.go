@@ -6,18 +6,23 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 )
 
 func init() {
 	log.Println("init")
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 }
 
 func main() {
 	log.Println("Starting app...")
-
 	router := mux.NewRouter()
 	bookRepository := repositories.NewBookRepository()
 
@@ -38,11 +43,11 @@ func healthHandler(w http.ResponseWriter, _ *http.Request) {
 }
 
 func configureCors(router *mux.Router) http.Handler {
-	return handlers.CORS(
-		handlers.AllowedHeaders([]string{"X-Requested-With"}),
+	return cors.New(cors.Options{
+		// AllowCredentials
+		// handlers.AllowedHeaders([]string{"X-Requested-With"}),
 		// Where ORIGIN_ALLOWED is like `scheme://dns[:port]`, or `*` (insecure)
-		// handlers.AllowedOrigins([]string{os.Getenv("ORIGIN_ALLOWED")}),
-		handlers.AllowedOrigins([]string{"*"}),
-		handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"}),
-	)(router)
+		AllowedOrigins: []string{os.Getenv("ORIGIN_ALLOWED")},
+		AllowedMethods: []string{"GET", "HEAD", "POST", "PUT", "OPTIONS"},
+	}).Handler(router)
 }

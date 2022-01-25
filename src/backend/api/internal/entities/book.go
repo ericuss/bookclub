@@ -1,7 +1,7 @@
 package entities
 
 type Book struct {
-	Id       int    `bson:"Id"`
+	Id       string `bson:"Id"`
 	Title    string `bson:"Title"`
 	Series   string `bson:"Status"`
 	Authors  string `bson:"Species"`
