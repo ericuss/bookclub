@@ -9,7 +9,8 @@ import (
 )
 
 type AddBookRequest struct {
-	Url string `json:"url"`
+	Url  string `json:"url"`
+	User string `json:"user"`
 }
 
 type upsertCharactersHandler struct {
@@ -28,9 +29,8 @@ func (h *upsertCharactersHandler) Handler(request AddBookRequest) (*entities.Boo
 	// endpoint := "https://www.goodreads.com/book/show/2767793-the-hero-of-ages"
 	endpointSplitted := strings.Split(request.Url, "/")
 	id := endpointSplitted[len(endpointSplitted)-1]
-	user := "Random"
 
-	book, err := h.scrappingService.Execute(request.Url, user)
+	book, err := h.scrappingService.Execute(request.Url, request.User)
 	book.Id = id
 
 	if err != nil {

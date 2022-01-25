@@ -16,7 +16,8 @@ export const responseBody = (response: AxiosResponse) => response.data;
 
 export const Requests = {
 	get: (url: string) => Instance.get(url).then(responseBody),
-	post: (url: string, o: any): Promise<void> => axios.post('http://localhost:8080/api/' + url, JSON.stringify(o), { headers: config.headers }),
+	post: (url: string, o: any): Promise<void> => Instance.post('http://localhost:8080/api/' + url, JSON.stringify(o)),
+	put: (url: string, o: any): Promise<void> => Instance.put('http://localhost:8080/api/' + url, JSON.stringify(o)),
 };
 
 

@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	entities "bookclubapi/internal/entities"
@@ -13,6 +14,7 @@ import (
 type BookRepository interface {
 	RepositoryBase
 	Fetch() ([]*entities.Book, error)
+	UpdateReaded(id string, readed bool) error
 }
 
 type bookRepository struct {
@@ -49,4 +51,18 @@ func (r *bookRepository) Fetch() ([]*entities.Book, error) {
 	}
 
 	return results, nil
+}
+
+func (r *bookRepository) UpdateReaded(id string, readed bool) error {
+	result, err := r.repositoryBase.collection.UpdateOne(
+		context.TODO(),
+		bson.M{"Id": id},
+		bson.D{
+			{"$set", bson.D{{"Readed", readed}}},
+		})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Updated %v Documents!\n", result.ModifiedCount)
+	return err
 }

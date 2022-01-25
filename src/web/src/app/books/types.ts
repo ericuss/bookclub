@@ -9,4 +9,5 @@ export interface Book {
     Url: string;
     Pages: string;
     Username: string;
+    Readed?: boolean;
 }

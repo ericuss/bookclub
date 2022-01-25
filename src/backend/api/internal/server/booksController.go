@@ -26,6 +26,8 @@ func NewBooksController(repository repositories.BookRepository, r *mux.Router) S
 func (a *booksController) routes() {
 	a.router.HandleFunc("/api/books", a.fetch).Methods(http.MethodGet)
 	a.router.HandleFunc("/api/books", a.add).Methods(http.MethodPost)
+	a.router.HandleFunc("/api/books/{id}/readed", a.readed).Methods(http.MethodPut)
+	a.router.HandleFunc("/api/books/{id}/unreaded", a.unreaded).Methods(http.MethodPut)
 }
 func (a *booksController) Router() mux.Router {
 	return *a.router
@@ -48,4 +50,21 @@ func (a *booksController) add(w http.ResponseWriter, r *http.Request) {
 	book, _ := commands.NewUpsertCharactersHandler().Handler(commandRequest)
 
 	json.NewEncoder(w).Encode(book)
+}
+
+func (a *booksController) readed(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	a.updateRead(r, true)
+}
+
+func (a *booksController) unreaded(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	a.updateRead(r, false)
+}
+
+func (a *booksController) updateRead(r *http.Request, readed bool) {
+	params := mux.Vars(r)
+	id := params["id"]
+	commandRequest := commands.MarkAsReadedRequest{Readed: readed, Id: id}
+	commands.NewMarkAsReadedHandler().Handler(commandRequest)
 }

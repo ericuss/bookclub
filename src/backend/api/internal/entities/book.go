@@ -11,4 +11,5 @@ type Book struct {
 	Url      string `bson:"Url"`
 	Pages    string `bson:"Pages"`
 	Username string `bson:"Username"`
+	Readed   bool   `bson:"Readed"`
 }
