@@ -13,19 +13,19 @@ type AddBookRequest struct {
 	User string `json:"user"`
 }
 
-type upsertCharactersHandler struct {
+type addBookHandler struct {
 	repository       repositories.BookRepository
 	scrappingService services.ScrappingService
 }
 
-func NewUpsertCharactersHandler() *upsertCharactersHandler {
-	return &upsertCharactersHandler{
+func NewAddBookHandler() *addBookHandler {
+	return &addBookHandler{
 		repository:       repositories.NewBookRepository(),
 		scrappingService: services.NewScrappingService(),
 	}
 }
 
-func (h *upsertCharactersHandler) Handler(request AddBookRequest) (*entities.Book, error) {
+func (h *addBookHandler) Handler(request AddBookRequest) (*entities.Book, error) {
 	// endpoint := "https://www.goodreads.com/book/show/2767793-the-hero-of-ages"
 	endpointSplitted := strings.Split(request.Url, "/")
 	id := endpointSplitted[len(endpointSplitted)-1]
