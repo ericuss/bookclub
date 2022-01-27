@@ -24,11 +24,14 @@ func NewBooksController(repository repositories.BookRepository, r *mux.Router) S
 }
 
 func (a *booksController) routes() {
-	a.router.HandleFunc("/api/books", a.fetch).Methods(http.MethodGet)
-	a.router.HandleFunc("/api/books", a.add).Methods(http.MethodPost)
-	a.router.HandleFunc("/api/books/{id}/readed", a.readed).Methods(http.MethodPut)
-	a.router.HandleFunc("/api/books/{id}/unreaded", a.unreaded).Methods(http.MethodPut)
+	endpoint := "/api/books"
+	a.router.HandleFunc(endpoint, a.fetch).Methods(http.MethodGet)
+	a.router.HandleFunc(endpoint, a.add).Methods(http.MethodPost)
+	a.router.HandleFunc(endpoint+"/{id}/readed", a.markAsReaded).Methods(http.MethodPut)
+	a.router.HandleFunc(endpoint+"/unreaded", a.fetchUnreaded).Methods(http.MethodGet)
+	a.router.HandleFunc(endpoint+"/{id}/unreaded", a.markAsUnreaded).Methods(http.MethodPut)
 }
+
 func (a *booksController) Router() mux.Router {
 	return *a.router
 }
@@ -52,12 +55,19 @@ func (a *booksController) add(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(book)
 }
 
-func (a *booksController) readed(w http.ResponseWriter, r *http.Request) {
+func (a *booksController) markAsReaded(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	a.updateRead(r, true)
 }
 
-func (a *booksController) unreaded(w http.ResponseWriter, r *http.Request) {
+func (a *booksController) fetchUnreaded(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	books, _ := a.repository.FetchUnread()
+
+	json.NewEncoder(w).Encode(books)
+}
+
+func (a *booksController) markAsUnreaded(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	a.updateRead(r, false)
 }

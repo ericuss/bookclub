@@ -14,6 +14,7 @@ import (
 type BookRepository interface {
 	RepositoryBase
 	Fetch() ([]*entities.Book, error)
+	FetchUnread() ([]*entities.Book, error)
 	UpdateReaded(id string, readed bool) error
 }
 
@@ -31,6 +32,33 @@ func (r *bookRepository) Fetch() ([]*entities.Book, error) {
 	var results []*entities.Book
 	findOptions := options.Find()
 	cur, err := r.repositoryBase.collection.Find(context.TODO(), bson.D{{}}, findOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for cur.Next(context.TODO()) {
+
+		// create a value into which the single document can be decoded
+		var s entities.Book
+		err := cur.Decode(&s)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		results = append(results, &s)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return results, nil
+}
+
+// refactor
+func (r *bookRepository) FetchUnread() ([]*entities.Book, error) {
+	var results []*entities.Book
+	findOptions := options.Find()
+	cur, err := r.repositoryBase.collection.Find(context.TODO(), bson.M{"Readed": bson.M{"$ne": true}}, findOptions)
 	if err != nil {
 		log.Fatal(err)
 	}

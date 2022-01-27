@@ -1,7 +1,7 @@
 
-import { Book } from './types';
+import { Book } from '../shared/types/types';
 import { useEffect, useState } from 'react';
-import { BooksService } from './service'
+import { BooksService } from '../core/http/bookService'
 
 
 export interface UseBooksType {

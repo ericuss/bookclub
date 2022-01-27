@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useBooks } from "./useBooks.hook";
-import { BooksService, ImportBookRequest } from './service'
-import { Book } from "./types";
+import { BooksService, ImportBookRequest } from '../core/http/bookService'
+import { Book } from "../shared/types/types";
 import './index.css';
 import { Button, Card, Form } from "react-bootstrap";
 
