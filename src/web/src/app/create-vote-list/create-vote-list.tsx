@@ -6,11 +6,15 @@ import { BookForVoteDetail } from "./book-for-vote";
 import './index.css';
 
 export const CreateVoteList: FC = () => {
-    const { state: books } = useBooks();
+    const { state: books, createVoteList } = useBooks();
 
     async function createList(e: any) {
         e.preventDefault()
-        console.log(books.filter(x => x.Selected).length)
+        await createVoteList(
+            e.currentTarget.elements["vote-list-name"].value,
+            books.filter(x => x.Selected).map(x => x.Id)
+        )
+        console.log(books.filter(x => x.Selected))
     }
 
     return (
@@ -18,22 +22,12 @@ export const CreateVoteList: FC = () => {
             Create Vote List
 
             <Form onSubmit={createList} className="p-5">
-                <Form.Group className="mb-3" controlId="user">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter user" />
-                </Form.Group>
                 <Form.Group className="mb-3" controlId="vote-list-name">
                     <Form.Label>List name</Form.Label>
                     <Form.Control type="text" placeholder="Enter vote list name" />
                 </Form.Group>
                 <Button variant="primary" type="submit">
                     Create list
-                    {/* {isImporting ?
-                        <>
-                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Importing ...
-                        </>
-                        : 'Import'} */}
                 </Button>
             </Form>
             <div className="book-list">

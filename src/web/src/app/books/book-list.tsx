@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useBooks } from "./useBooks.hook";
 import { BooksService, ImportBookRequest } from '../core/http/bookService'
-import { Book } from "../shared/types/types";
+import { Book, Token } from "../shared/types/types";
 import './index.css';
 import { Button, Card, Form } from "react-bootstrap";
 
@@ -19,10 +19,9 @@ export const BookList: FC = () => {
         try {
             const request: ImportBookRequest = {
                 url: e.currentTarget.elements["book-url"].value,
-                user: e.currentTarget.elements["book-user"].value,
             }
 
-            if (!request.url || !request.user) {
+            if (!request.url) {
                 console.log("Request has empty values");
             } else {
                 await BooksService.import(request);
@@ -56,10 +55,25 @@ export const BookList: FC = () => {
         }
     }
 
+    const getUser = (): Token => {
+        try {
+            const token = localStorage.getItem("jwt");
+            if (token !== null) {
+                return JSON.parse(atob(token?.split('.')[1]));
+            }
+
+        } catch (e) {
+        }
+
+        return { exp: -1, iss: '' };
+    };
+
+    const user = getUser();
+
     const Book: FC<BookProps> = ({ book }) => {
         return (
             <Card className="book mt-3" style={{ width: '18rem' }}>
-                {!!book.Readed
+                {book.Readed !== null && book.Readed?.indexOf(user.iss) !== -1
                     ? <button className="btn btn-warning" onClick={() => markAsUnreaded(book.Id)}>Mark as unreaded</button>
                     : <button className="btn btn-success" onClick={() => markAsReaded(book.Id)}>Mark as readed</button>
                 }
@@ -82,10 +96,6 @@ export const BookList: FC = () => {
     return (
         <div className="books">
             <Form onSubmit={importBook} className="p-5">
-                <Form.Group className="mb-3" controlId="book-user">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter user" />
-                </Form.Group>
                 <Form.Group className="mb-3" controlId="book-url">
                     <Form.Label>Book link</Form.Label>
                     <Form.Control type="text" placeholder="Enter url of book" />

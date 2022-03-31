@@ -4,7 +4,6 @@ import { Requests } from './serviceCore'
 
 export interface ImportBookRequest {
 	url: string;
-	user: string;
 }
 
 export const BooksService = {

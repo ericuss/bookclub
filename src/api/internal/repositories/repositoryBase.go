@@ -7,14 +7,14 @@ import (
 	"os"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	mongo "go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type RepositoryBase interface {
-	Add(entity interface{}) (id primitive.ObjectID, err error)
-	Upsert(id int, entity interface{}) (updateResult *mongo.UpdateResult, err error)
+	Add(entity interface{}) error
+	Upsert(id string, entity interface{}) (updateResult *mongo.UpdateResult, err error)
+	Delete(id string) (err error)
 }
 
 type repositoryBase struct {
@@ -24,19 +24,19 @@ type repositoryBase struct {
 
 func NewRepositoryBase(collectionName string) *repositoryBase {
 	connectionString := os.Getenv("connectionString")
-
+	// connectionString := "mongodb://localhost:27017"
 	fmt.Println("connectionString")
 	fmt.Println(connectionString)
 	clientOpts := options.Client().ApplyURI(connectionString)
 	client, err := mongo.Connect(context.TODO(), clientOpts)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	// Check the connections
 	err = client.Ping(context.TODO(), nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	fmt.Println("Congratulations, you're already connected to MongoDB!")
@@ -47,17 +47,17 @@ func NewRepositoryBase(collectionName string) *repositoryBase {
 	}
 }
 
-func (r *repositoryBase) Add(entity interface{}) (id primitive.ObjectID, err error) {
-	result, err := r.collection.InsertOne(context.TODO(), entity)
+func (r *repositoryBase) Add(entity interface{}) error {
+	_, err := r.collection.InsertOne(context.TODO(), entity)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
-	return result.InsertedID.(primitive.ObjectID), nil
+	return nil
 }
 
-func (r *repositoryBase) Upsert(id int, entity interface{}) (updateResult *mongo.UpdateResult, err error) {
+func (r *repositoryBase) Upsert(id string, entity interface{}) (updateResult *mongo.UpdateResult, err error) {
 	result, err := r.collection.UpdateOne(
 		context.Background(),
 		bson.M{"Id": id},
@@ -66,8 +66,22 @@ func (r *repositoryBase) Upsert(id int, entity interface{}) (updateResult *mongo
 	)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	return result, nil
+}
+
+func (r *repositoryBase) Delete(id string) (err error) {
+	result, err := r.collection.DeleteOne(
+		context.Background(),
+		bson.M{"Id": id},
+	)
+
+	if err != nil || result.DeletedCount != 1 {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }

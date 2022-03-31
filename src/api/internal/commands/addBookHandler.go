@@ -9,18 +9,20 @@ import (
 )
 
 type AddBookRequest struct {
-	Url  string `json:"url"`
-	User string `json:"user"`
+	UserId string
+	Url    string `json:"url"`
 }
 
 type addBookHandler struct {
 	repository       repositories.BookRepository
+	userRepository   repositories.UserRepository
 	scrappingService services.ScrappingService
 }
 
 func NewAddBookHandler() *addBookHandler {
 	return &addBookHandler{
 		repository:       repositories.NewBookRepository(),
+		userRepository:   repositories.NewUserRepository(),
 		scrappingService: services.NewScrappingService(),
 	}
 }
@@ -30,18 +32,35 @@ func (h *addBookHandler) Handler(request AddBookRequest) (*entities.Book, error)
 	endpointSplitted := strings.Split(request.Url, "/")
 	id := endpointSplitted[len(endpointSplitted)-1]
 
-	book, err := h.scrappingService.Execute(request.Url, request.User)
-	book.Id = id
+	user, err := h.getUser(request.UserId)
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 
-	_, addError := h.repository.Add(book)
+	book, err := h.scrappingService.Execute(request.Url)
+	book.Id = id
+	if err != nil {
+		log.Println(err)
+	}
+
+	book.Username = user.Id
+
+	addError := h.repository.Add(book)
 
 	if addError != nil {
-		log.Fatalln(addError)
+		log.Println(addError)
 	}
 
 	return book, nil
+}
+
+func (h *addBookHandler) getUser(id string) (*entities.User, error) {
+
+	user, _ := h.userRepository.FetchById(id)
+
+	if user == nil {
+		log.Println("User not found")
+	}
+	return user, nil
 }

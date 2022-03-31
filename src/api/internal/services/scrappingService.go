@@ -9,7 +9,7 @@ import (
 )
 
 type ScrappingService interface {
-	Execute(endpoint string, user string) (*entities.Book, error)
+	Execute(endpoint string) (*entities.Book, error)
 }
 
 type scrappingService struct {
@@ -19,7 +19,7 @@ func NewScrappingService() *scrappingService {
 	return &scrappingService{}
 }
 
-func (r *scrappingService) Execute(endpoint string, user string) (*entities.Book, error) {
+func (r *scrappingService) Execute(endpoint string) (*entities.Book, error) {
 	// endpoing := "https://www.goodreads.com/book/show/2767793-the-hero-of-ages"
 
 	c := colly.NewCollector(
@@ -38,7 +38,6 @@ func (r *scrappingService) Execute(endpoint string, user string) (*entities.Book
 		book.ImageUrl = e.ChildAttr("#coverImage", "src")
 		book.Url = endpoint
 		book.Pages = e.ChildText("#details [itemprop=numberOfPages]")
-		book.Username = user
 
 	})
 	c.Visit(endpoint)

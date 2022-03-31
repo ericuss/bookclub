@@ -11,3 +11,8 @@ services:
     build:
       context: .
       dockerfile: src/web/Dockerfile
+  app:
+    image: ${DOCKER_REGISTRY:-bookclubapi}/app:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: ./Dockerfile

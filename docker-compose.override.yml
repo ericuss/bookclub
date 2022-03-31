@@ -17,9 +17,14 @@ services:
     - mongo
 
   web:
-    # environment:
-    # - connectionString=mongodb://mongo:27017
     ports:
       - "3000:80"
     depends_on:    
     - api
+
+  app:
+    environment:
+    - connectionString=mongodb://mongo:27017
+    - ORIGIN_ALLOWED=*
+    ports:
+      - "5000:8080"

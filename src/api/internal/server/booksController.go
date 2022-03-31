@@ -1,80 +1,92 @@
 package server
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
 	commands "bookclubapi/internal/commands"
 	repositories "bookclubapi/internal/repositories"
 
-	"github.com/gorilla/mux"
+	"github.com/gofiber/fiber/v2"
 )
 
+type BooksController interface {
+	Fetch(w http.ResponseWriter, r *http.Request)
+	Add(w http.ResponseWriter, r *http.Request)
+	MarkAsReaded(w http.ResponseWriter, r *http.Request)
+	FetchUnreaded(w http.ResponseWriter, r *http.Request)
+	MarkAsUnreaded(w http.ResponseWriter, r *http.Request)
+}
+
 type booksController struct {
-	router     *mux.Router
-	repository repositories.BookRepository
+	repository     repositories.BookRepository
+	userRepository repositories.UserRepository
 }
 
-func NewBooksController(repository repositories.BookRepository, r *mux.Router) Server {
-	a := &booksController{repository: repository}
-	a.router = r
-	a.routes()
-	return a
+func NewBooksController() *booksController {
+	return &booksController{
+		repository:     repositories.NewBookRepository(),
+		userRepository: repositories.NewUserRepository(),
+	}
 }
 
-func (a *booksController) routes() {
-	endpoint := "/api/books"
-	a.router.HandleFunc(endpoint, a.fetch).Methods(http.MethodGet)
-	a.router.HandleFunc(endpoint, a.add).Methods(http.MethodPost)
-	a.router.HandleFunc(endpoint+"/{id}/readed", a.markAsReaded).Methods(http.MethodPut)
-	a.router.HandleFunc(endpoint+"/unreaded", a.fetchUnreaded).Methods(http.MethodGet)
-	a.router.HandleFunc(endpoint+"/{id}/unreaded", a.markAsUnreaded).Methods(http.MethodPut)
-}
-
-func (a *booksController) Router() mux.Router {
-	return *a.router
-}
-
-func (a *booksController) fetch(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func (a *booksController) Fetch(c *fiber.Ctx) error {
 	books, _ := a.repository.Fetch()
 
-	json.NewEncoder(w).Encode(books)
+	return c.JSON(books)
 }
 
-func (a *booksController) add(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func (a *booksController) FetchById(c *fiber.Ctx) error {
+	id := c.Params("id")
+	book, _ := a.repository.FetchById(id)
 
-	reqBody, _ := ioutil.ReadAll(r.Body)
-	var commandRequest commands.AddBookRequest
-	json.Unmarshal(reqBody, &commandRequest)
-
-	book, _ := commands.NewAddBookHandler().Handler(commandRequest)
-
-	json.NewEncoder(w).Encode(book)
+	return c.JSON(book)
 }
 
-func (a *booksController) markAsReaded(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	a.updateRead(r, true)
+func (a *booksController) Add(c *fiber.Ctx) error {
+	var command commands.AddBookRequest
+
+	if err := c.BodyParser(&command); err != nil {
+		return err
+	}
+
+	userId, err := GetUserId(c, a.userRepository)
+	if err != nil {
+		return err
+	}
+
+	command.UserId = userId
+
+	book, _ := commands.NewAddBookHandler().Handler(command)
+
+	return c.JSON(book)
 }
 
-func (a *booksController) fetchUnreaded(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func (a *booksController) MarkAsReaded(c *fiber.Ctx) error {
+	return a.updateRead(c, true)
+}
+
+func (a *booksController) MarkAsUnreaded(c *fiber.Ctx) error {
+	return a.updateRead(c, false)
+}
+
+func (a *booksController) FetchUnreaded(c *fiber.Ctx) error {
 	books, _ := a.repository.FetchUnread()
 
-	json.NewEncoder(w).Encode(books)
+	if books == nil || len(books) == 0 {
+		return nil
+	}
+
+	return c.JSON(books)
 }
 
-func (a *booksController) markAsUnreaded(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	a.updateRead(r, false)
-}
+func (a *booksController) updateRead(c *fiber.Ctx, readed bool) error {
+	id := c.Params("id")
+	userId, err := GetUserId(c, a.userRepository)
+	if err != nil {
+		return err
+	}
 
-func (a *booksController) updateRead(r *http.Request, readed bool) {
-	params := mux.Vars(r)
-	id := params["id"]
-	commandRequest := commands.MarkAsReadedRequest{Readed: readed, Id: id}
+	commandRequest := commands.MarkAsReadedRequest{Readed: readed, Id: id, UserId: userId}
 	commands.NewMarkAsReadedHandler().Handler(commandRequest)
+	return nil
 }
