@@ -91,9 +91,10 @@ func main() {
 	}()
 
 	// ...
+	httpPort := os.Getenv("HTTP_PORT")
 
-	fmt.Println("The bookclub server is on tap now: http://localhost:8080")
-	if err := app.Listen(":8080"); err != nil {
+	fmt.Println("The bookclub server is on tap now: http://localhost:" + httpPort)
+	if err := app.Listen(":" + httpPort); err != nil {
 		log.Panic(err)
 	}
 
