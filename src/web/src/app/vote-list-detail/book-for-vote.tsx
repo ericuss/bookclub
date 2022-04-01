@@ -1,21 +1,17 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Card } from "react-bootstrap";
 import { BookForVote } from "./types";
 
 type BookProps = {
+    index: number;
     book: BookForVote;
+    selectBook: (index: number) => void;
 }
-export const BookForVoteDetail: FC<BookProps> = ({ book: bookRaw }) => {
-    const [book, setBook] = useState<BookForVote>(bookRaw);
-
-    function selectBook() {
-        book.Selected = !!!book.Selected;
-        bookRaw.Selected = book.Selected;
-        setBook({ ...book });
-    }
+export const BookForVoteDetail: FC<BookProps> = ({ index, book, selectBook }) => {
+    if (book === null) return <></>;
 
     return (
-        <Card className={"book mt-3" + (book.Selected !== true ? '' : 'border border-3 border-primary rounded ')} style={{ width: '18rem' }} onClick={() => selectBook()}>
+        <Card className={"book mt-3" + (book.Selected !== true ? '' : 'border border-3 border-primary rounded ')} style={{ width: '18rem' }} onClick={() => selectBook(index)}>
             <Card.Img variant="top" src={book.ImageUrl} alt="Book cover" />
             <Card.Body>
                 <Card.Title>{book.Title}</Card.Title>

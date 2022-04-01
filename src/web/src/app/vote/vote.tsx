@@ -17,9 +17,10 @@ export const Vote: FC = () => {
             Vote lists
 
             {voteList?.map((v, i) => 
-                    <Card className={"vote-list mt-3 border border-3 rounded "} style={{ width: '18rem' }}  onClick={() => goToDetails(v.Id)}>
+                    <Card key={i} className={"vote-list mt-3 border border-3 rounded "} style={{ width: '18rem' }}  onClick={() => goToDetails(v.Id)}>
                         <Card.Body>
                             <Card.Title>{v.Title}</Card.Title>
+                            <Card.Subtitle ><i>{v.NumberOfVotes}</i></Card.Subtitle>
                             <Card.Subtitle ><i>{v.UserId}</i></Card.Subtitle>
                         </Card.Body>
                     </Card>

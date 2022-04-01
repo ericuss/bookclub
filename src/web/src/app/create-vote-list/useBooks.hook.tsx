@@ -9,7 +9,7 @@ export interface UseBooksType {
     state: BookForVote[];
     setState: React.Dispatch<React.SetStateAction<BookForVote[]>>;
     loadUnreadedBooks(): Promise<void>;
-    createVoteList(title: string, books: string[]): Promise<void>;
+    createVoteList(title: string, numberOfVotes: number, books: string[]): Promise<void>;
 }
 
 export function useBooks(): UseBooksType {
@@ -31,10 +31,11 @@ export function useBooks(): UseBooksType {
         }
     }
 
-    async function createVoteList(title: string, books: string[]) {
+    async function createVoteList(title: string, numberOfVotes: number, books: string[]) {
         try {
             const voteList: CreateVoteList = {
                 title,
+                numberOfVotes,
                 books,
             }
             await VoteListsService.create(voteList);

@@ -4,6 +4,7 @@ import { Requests } from './serviceCore'
 
 export interface CreateVoteList {
 	title: string;
+	numberOfVotes: number;
 	books: string[];
 }
 

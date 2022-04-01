@@ -8,9 +8,10 @@ import (
 )
 
 type AddVoteListRequest struct {
-	UserId string
-	Title  string   `json:"title"`
-	Books  []string `json:"books"`
+	UserId        string
+	Title         string   `json:"title"`
+	NumberOfVotes int16    `json:"numberOfVotes,omitempty,string"`
+	Books         []string `json:"books"`
 }
 
 type addVoteListHandler struct {
@@ -26,9 +27,10 @@ func NewAddVoteListHandler() *addVoteListHandler {
 func (h *addVoteListHandler) Handler(request AddVoteListRequest) (*entities.VoteList, error) {
 	id, _ := uuid.NewRandom()
 	voteList := &entities.VoteList{
-		Id:     id.String(),
-		UserId: request.UserId,
-		Title:  request.Title,
+		Id:            id.String(),
+		UserId:        request.UserId,
+		NumberOfVotes: request.NumberOfVotes,
+		Title:         request.Title,
 	}
 
 	voteList.Books = make(map[string][]string)

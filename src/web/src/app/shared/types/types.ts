@@ -25,6 +25,7 @@ export interface VoteList {
     Id: string;
     UserId: string;
     Title: string;
+    NumberOfVotes: number;
     Books: BookFromVoteList[];
 }
 

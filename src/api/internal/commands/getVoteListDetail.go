@@ -11,10 +11,11 @@ type GetVoteListDetailRequest struct {
 }
 
 type GetVoteListDetailResponse struct {
-	Id     string
-	UserId string
-	Title  string
-	Books  []BookDto
+	Id            string
+	UserId        string
+	Title         string
+	NumberOfVotes int16
+	Books         []BookDto
 }
 
 type BookDto struct {
@@ -71,9 +72,10 @@ func (h *getVoteListDetail) Handler(request GetVoteListDetailRequest) (*GetVoteL
 	}
 
 	response := GetVoteListDetailResponse{
-		Id:     voteList.Id,
-		Title:  voteList.Title,
-		UserId: voteList.UserId,
+		Id:            voteList.Id,
+		Title:         voteList.Title,
+		NumberOfVotes: voteList.NumberOfVotes,
+		UserId:        voteList.UserId,
 	}
 
 	for k, v := range voteList.Books {
