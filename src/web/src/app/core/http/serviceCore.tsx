@@ -2,8 +2,8 @@
 import axios, { AxiosResponse } from 'axios';
 const config = {
 	// baseURL: 'http://host.docker.internal:8080/api/',
-	// baseURL: 'http://localhost:8080/api/',
-	baseURL: '/api/',
+	baseURL: 'http://localhost:8080/api/',
+	// baseURL: '/api/',
 	timeout: 15000,
 	headers: {
 		'Content-Type': 'application/json',

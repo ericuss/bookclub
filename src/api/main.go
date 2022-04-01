@@ -75,6 +75,12 @@ func main() {
 		log.Println("Error loading .env file")
 	}
 
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Printf("Trapped panic: %s (%T)\n", err, err)
+		}
+	}()
+
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{

@@ -1,0 +1,5 @@
+.vote-vote-list-books{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}

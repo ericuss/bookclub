@@ -14,10 +14,11 @@ export const VoteListDetail: FC = () => {
     })) as BookForVote[];
 
     return (
-        <div className="create-vote-list">
-            Create Vote List
-            <h1>{voteList?.Title}</h1>
-            {booksForVote?.map((b, i) => <BookForVoteDetail book={b} />)}
+        <div className="vote-vote-list">
+            <h1> Vote List {voteList?.Title}</h1>
+            <div className="vote-vote-list-books">
+                {booksForVote?.map((b, i) => <BookForVoteDetail book={b} />)}
+            </div>
         </div>
     );
 
