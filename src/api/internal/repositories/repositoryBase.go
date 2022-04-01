@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"go.mongodb.org/mongo-driver/bson"
 	mongo "go.mongodb.org/mongo-driver/mongo"
@@ -23,18 +22,19 @@ type repositoryBase struct {
 }
 
 func NewRepositoryBase(collectionName string) *repositoryBase {
-	connectionString := os.Getenv("connectionString")
-	// connectionString := "mongodb://localhost:27017"
-	fmt.Println("connectionString")
-	fmt.Println(connectionString)
-	clientOpts := options.Client().ApplyURI(connectionString)
-	client, err := mongo.Connect(context.TODO(), clientOpts)
-	if err != nil {
-		log.Println(err)
-	}
+	// connectionString := os.Getenv("connectionString")
+	// // connectionString := "mongodb://localhost:27017"
+	// fmt.Println("connectionString")
+	// fmt.Println(connectionString)
+	// clientOpts := options.Client().ApplyURI(connectionString)
+	// client, err := mongo.Connect(context.TODO(), clientOpts)
+	// if err != nil {
+	// 	log.Println(err)
+	// }
 
+	client := getInstance()
 	// Check the connections
-	err = client.Ping(context.TODO(), nil)
+	err := client.Ping(context.TODO(), nil)
 	if err != nil {
 		log.Println(err)
 	}
