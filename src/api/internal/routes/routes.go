@@ -44,6 +44,8 @@ func Setup(app *fiber.App) {
 	api.Get("/vote-lists", voteListsController.Fetch)
 	api.Get("/vote-lists/:id", voteListsController.FetchById)
 	api.Post("/vote-lists", voteListsController.Add)
+	api.Post("/vote-lists/:id/vote", voteListsController.Vote)
+
 	// app.Static("/*", "./public")
 
 }

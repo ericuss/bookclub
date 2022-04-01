@@ -36,7 +36,7 @@ export const SignIn: FC = () => {
         }
     }
 
-useEffect(() => { console.log(isRegisterVisible)}, [isRegisterVisible])
+useEffect(() => { console.log(isRegisterVisible)}, [isRegisterVisible]);
     const signInForm = () => {
         return <Form onSubmit={signInAction} className="sign-in ">
             <h1 className="h3 mb-3 font-weight-normal">Sign in</h1>

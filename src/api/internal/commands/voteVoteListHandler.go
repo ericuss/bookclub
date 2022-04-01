@@ -28,12 +28,15 @@ func (h *voteVoteListHandler) Handler(request VoteVoteListRequest) error {
 	if err != nil {
 		return err
 	}
-
+	booksUpdated := make(map[string][]string)
 	for k, v := range voteList.Books {
 		if services.StringInSlice(k, request.Books) {
 			v = append(v, request.UserId)
 		}
+		booksUpdated[k] = v
 	}
+
+	voteList.Books = booksUpdated
 
 	result, err := h.repository.Upsert(voteList.Id, voteList)
 
