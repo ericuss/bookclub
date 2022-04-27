@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lanre.Context.Library\Lanre.Context.Library.csproj" />
+    <ProjectReference Include="..\Lanre.Context.Poll\Lanre.Context.Poll.csproj" />
     <ProjectReference Include="..\Lanre.Infrastructure\Lanre.Infrastructure.csproj" />
   </ItemGroup>
 

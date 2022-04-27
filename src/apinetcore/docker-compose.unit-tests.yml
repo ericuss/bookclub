@@ -2,8 +2,14 @@ version: '3.4'
 
 services:
   library.unittests:
-    image: ${DOCKER_REGISTRY-}lanrecontextlibraryunittests
+    image: ${DOCKER_REGISTRY-}bookclub-library-unittests
     build:
       context: .
       dockerfile: tests/Lanre.Context.Library.UnitTests/Dockerfile
+      
+  poll.unittests:
+    image: ${DOCKER_REGISTRY-}bookclub-poll-unittests
+    build:
+      context: .
+      dockerfile: tests/Lanre.Context.Poll.UnitTests/Dockerfile
 

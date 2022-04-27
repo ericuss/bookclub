@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Lanre.Infrastructure\Lanre.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure\Database\Migrations\" />
-  </ItemGroup>
-
 </Project>

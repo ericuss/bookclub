@@ -1,5 +1,7 @@
 using Lanre.Context.Library;
 using Lanre.Context.Library.Infrastructure.Database;
+using Lanre.Context.Poll;
+using Lanre.Context.Poll.Infrastructure.Database;
 using Lanre.Infrastructure;
 using Lanre.Infrastructure.Contexts;
 
@@ -23,6 +25,7 @@ builder.Services
         .Configure<SqlOptions>(builder.Configuration.GetSection("Sql"))
         .ConfigureInfrastructure()
         .ConfigureLibrary(builder.Configuration)
+        .ConfigurePoll(builder.Configuration)
         .AddApiVersioning(options =>
         {
             options.ApiVersionReader = new UrlSegmentApiVersionReader();
@@ -67,13 +70,13 @@ builder.Services
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
-
-
 var libraryContext = scope.ServiceProvider.GetService<LibraryContext>();
+var pollContext = scope.ServiceProvider.GetService<PollContext>();
 var sqlOptions = scope.ServiceProvider.GetService<IOptions<SqlOptions>>();
 if (app.Environment.IsDevelopment())
 {
     ContextInitialize.InitializeDb(sqlOptions.Value, libraryContext).Wait();
+    ContextInitialize.InitializeDb(sqlOptions.Value, pollContext).Wait();
 }
 scope.Dispose();
 

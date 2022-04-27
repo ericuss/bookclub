@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Lanre.Context.Poll.UnitTests": {
+      "commandName": "Project"
+    },
+    "Docker (1)": {
+      "commandName": "Docker"
+    }
+  }
+}
