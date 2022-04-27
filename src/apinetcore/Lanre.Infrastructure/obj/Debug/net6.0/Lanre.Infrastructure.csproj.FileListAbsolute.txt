@@ -1,0 +1,12 @@
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\bin\Debug\net6.0\Lanre.Infrastructure.deps.json
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\bin\Debug\net6.0\Lanre.Infrastructure.dll
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\bin\Debug\net6.0\Lanre.Infrastructure.pdb
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\Lanre.Infrastructure.csproj.AssemblyReference.cache
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\Lanre.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\Lanre.Infrastructure.AssemblyInfoInputs.cache
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\Lanre.Infrastructure.AssemblyInfo.cs
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\Lanre.Infrastructure.csproj.CoreCompileInputs.cache
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\Lanre.Infrastructure.dll
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\refint\Lanre.Infrastructure.dll
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\Lanre.Infrastructure.pdb
+E:\projects\me\bookclub\src\apinetcore\Lanre.Infrastructure\obj\Debug\net6.0\ref\Lanre.Infrastructure.dll
