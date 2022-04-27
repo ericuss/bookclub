@@ -23,7 +23,17 @@ public class CrudHandler :
 
     public async Task<Guid> Handle(CreateRequest request, CancellationToken cancellationToken)
     {
-        var entity = Book.Create(request.Name);
+        var entity = new Book.Builder()
+            .SetName(request.Name)
+            .SetUserId(request.UserId)
+            .SetAuthors(request.Authors)
+            .SetImageUrl(request.ImageUrl)
+            .SetUrl(request.Url)
+            .SetSeries(request.Series)
+            .SetSinopsis(request.Sinopsis)
+            .SetPages(request.Pages)
+            .SetRating(request.Rating)
+            .Build();
 
         this.libraryContext.Books.Add(entity);
 
