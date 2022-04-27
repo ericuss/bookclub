@@ -1,5 +1,3 @@
-
-
 using Lanre.Context.Library;
 using Lanre.Context.Library.Infrastructure.Database;
 using Lanre.Infrastructure;
@@ -7,11 +5,14 @@ using Lanre.Infrastructure.Contexts;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 using System.Reflection;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 Dictionary<string, string> apiVersions = new() { { "v1", "Lanre API v1" } };
@@ -42,7 +43,24 @@ builder.Services
         .AddMediatR(
             Assembly.GetAssembly(typeof(Lanre.Infrastructure.Configure)),
             Assembly.GetAssembly(typeof(Lanre.Context.Library.Configure))
-        );
+        )
+        .AddAuthorization()
+        .AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Authority = builder.Configuration["Auth:Authority"];
+            options.Audience = builder.Configuration["Auth:Audience"];
+            // If the access token does not have a `sub` claim, `User.Identity.Name` will be `null`. Map it to a different claim by setting the NameClaimType below.
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                NameClaimType = ClaimTypes.NameIdentifier
+            };
+        });
+;
 #pragma warning restore CS8604 // Possible null reference argument.
 ;
 
@@ -58,6 +76,7 @@ if (app.Environment.IsDevelopment())
     ContextInitialize.InitializeDb(sqlOptions.Value, libraryContext).Wait();
 }
 scope.Dispose();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -65,20 +84,26 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-app.UseCustomSwagger(apiVersions);
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-//app.UseAuthorization();
-
-app.MapGet("/", () => "Hello World!");
-app.UseEndpoints(endpoints =>
+else
 {
-    //endpoints.UseHealthChecks();
-    endpoints.MapControllers();
-});
+    app.UseDeveloperExceptionPage();
+    app.MapGet("/", async context =>
+    {
+        await context.Response.WriteAsync("Hello");
+    });
+}
+
+app
+    .UseCustomSwagger(apiVersions)
+    .UseHttpsRedirection()
+    .UseStaticFiles()
+    .UseRouting()
+    .UseAuthentication()
+    .UseAuthorization()
+    .UseEndpoints(endpoints =>
+    {
+        //endpoints.UseHealthChecks();
+        endpoints.MapControllers();
+    });
 
 app.Run();

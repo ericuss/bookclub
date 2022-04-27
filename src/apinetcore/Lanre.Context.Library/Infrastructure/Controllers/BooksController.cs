@@ -1,18 +1,18 @@
 ﻿
-using Lanre.Infrastructure.Controllers;
-
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Lanre.Context.Library.Infrastructure.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lanre.Context.Library.Infrastructure.Controllers;
 
+[Authorize]
 [ApiController]
 [ApiVersion("1")]
 [ApiExplorerSettings(GroupName = "Books")]
 [Produces("application/json")]
 [Route("api/v{version:apiVersion}/[Controller]")]
-public class BooksController : ControllerCore
+public class BooksController : ControllerBase
 {
     private readonly IMediator mediator;
 

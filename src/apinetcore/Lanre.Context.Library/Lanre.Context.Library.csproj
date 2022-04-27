@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Configure.cs~RF276a846c.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Mediatr" Version="10.0.1" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
