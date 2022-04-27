@@ -14,5 +14,7 @@ namespace Lanre.Context.Library.Infrastructure.Database
         }
 
         public DbSet<Book> Books { get; set; }
+
+        public DbSet<MarkBook> MarkBooks { get; set; }
     }
 }

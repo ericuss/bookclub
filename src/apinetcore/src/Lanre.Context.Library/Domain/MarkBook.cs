@@ -21,6 +21,8 @@ public class MarkBook
 
     public MarkBookTypes Marked { get; internal set; }
 
+    public virtual Book Book { get; internal set; }
+
     public MarkBook SetBookId(Guid? bookId)
     {
         if (!bookId.HasValue)

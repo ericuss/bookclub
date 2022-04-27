@@ -10,7 +10,7 @@ WORKDIR /src
 COPY ["src/Lanre.Host/Lanre.Host.csproj", "src/Lanre.Host/"]
 COPY ["src/Lanre.Infrastructure/Lanre.Infrastructure.csproj", "src/Lanre.Infrastructure/"]
 COPY ["src/Lanre.Context.Library/Lanre.Context.Library.csproj", "src/Lanre.Context.Library/"]
-RUN dotnet restore "Lanre.Host/Lanre.Host.csproj"
+RUN dotnet restore "src/Lanre.Host/Lanre.Host.csproj"
 COPY . .
 WORKDIR "/src/src/Lanre.Host"
 RUN dotnet build "Lanre.Host.csproj" -c Release -o /app/build
